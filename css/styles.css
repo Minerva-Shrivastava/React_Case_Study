@@ -1,0 +1,10 @@
+.body {
+    width: 80%;
+	margin: 0 auto;
+	color: whitesmoke;
+	text-align: center;
+}
+.flexDisplayMain {
+    display: flex;
+    flex-direction: column;
+}

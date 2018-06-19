@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="./css/styles.css" type="text/css">
+    <link rel="stylesheet" href="./css/header.css" type="text/css">
+    <link rel="stylesheet" href="./css/footer.css" type="text/css">
+    <link rel="stylesheet" href="./css/dashboard.css" type="text/css">
+    <link rel="stylesheet" href="./css/loginForm.css" type="text/css">
+    <script src="./lib/react.js"></Script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/babel.min.js"></script>
+
+    <script type="text/babel">
+        
+        const ShoppingApp = () =>(
+            <div className="flexDisplayMain">
+                <Header/>
+                <MainContent/>
+                <Footer/>
+            </div>
+        );
+
+        const Header = () =>(
+            <header className="header">
+                <div className="jumbotron jumbotron-fluid">
+                    <div className="container">
+                    <h1 className="display-4">Shopping !</h1>
+                    <p className="lead">Welcome to our shopping website..</p>
+                    </div>
+                </div>
+            </header>
+
+        );
+
+        const Footer = () => (
+                <footer className="footer">
+                        <p>
+                            Made By Minerva Shrivastava
+                        </p>
+                </footer>
+        );
+
+        class MainContent extends React.Component{
+            constructor(){
+                super();
+                this.state = {
+                    check : false,
+                    userName : '',
+                    password : ''
+                }
+                this.changeState = this.changeState.bind(this);
+                this.login = this.login.bind(this);
+                this.logout = this.logout.bind(this);
+                this.formHandler = this.formHandler.bind(this);
+            }
+
+            changeState(){
+                console.log("login status changed");
+                this.setState({
+                    check:true
+                });
+            }
+
+            login(){
+                this.changeState();
+            }
+
+            logout(){
+                this.setState({
+                    check : false
+                });
+            }
+
+            formHandler(event){
+                this.setState({
+                    [event.target.name] : event.target.value
+                });
+            }
+
+            render() {
+                var check = this.state.check;
+                return(
+                    <div>
+                        {check ? (
+                            <Dashboard userName={this.state.userName}
+                                   logout={this.logout}/>
+                        ) : (
+                            <LoginForm login={this.login}
+                                   formHandler = {this.formHandler}/>
+                        )}
+                    </div>
+                );                    
+            }
+        };
+        
+        const LoginForm = (props) =>(
+            <div className="loginForm">
+                <center>
+                <form onSubmit={props.login}>
+                    <table>
+                        <tbody>
+                                <tr>
+                                    <td><label>UserName : </label></td>
+                                    <td>
+                                        <div className="form-group">
+                                                <input type="text" className="form-control" name="userName" onChange={props.formHandler}/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>Password : </label></td>
+                                    <td> 
+                                        <div className="form-group">
+                                            <input type="password" className="form-control" name="password" onChange={props.formHandler}/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><button className="btn btn-info" type="submit">Submit</button></td>
+                                </tr>
+                                </tbody>
+                 
+                            </table>
+                 
+                        </form>
+                </center>
+            </div>
+        );
+        
+        const Dashboard = (props) => (
+            <div className="dashboard">
+                <div className="flexDisplay">
+                    <div className="greeting"><h4>Welcome {props.userName}</h4></div>
+                    <div className="logout"> <button className="btn btn-info" onClick={props.logout}>Logout</button></div>
+                </div>
+                <Product/>
+            </div>
+        );
+
+        class Product extends React.Component {
+            constructor(){
+                super();
+                this.state = {
+                    products : [
+                        {id:'1', name:'Product 1', brand:'Allen Solly', price:100},
+                        {id:'2', name:'Product 2', brand:'Provogue', price:200},
+                        {id:'3', name:'Product 3', brand:'Park Avenue', price:300},
+                        {id:'4', name:'Product 4', brand:'Provogue', price:400},
+                        {id:'5', name:'Product 5', brand:'Mufti', price:500},
+                        {id:'6', name:'Product 6', brand:'Monte Carlo', price:600},
+                        {id:'7', name:'Product 7', brand:'Zodiac', price:700}
+                    ],
+                    productsAddedToCart : [],
+                    totalCost :0 
+                };
+                this.addProductToCart = this.addProductToCart.bind(this);
+                this.calculateTotalPrice = this.calculateTotalPrice.bind(this);
+            }
+
+            addProductToCart(id) {
+                for(var i=0; i<this.state.products.length; i++){
+                    if(this.state.products[i].id === id){
+                        this.state.productsAddedToCart.push(this.state.products[i]);
+                        this.setState({
+                            productsAddedToCart : this.state.productsAddedToCart
+                        });
+                    }
+                }
+            }
+
+            calculateTotalPrice(){
+                console.log("calculating total price..");
+                var price = 0;
+                for(var i=0; i<this.state.productsAddedToCart.length; i++){
+                    price = +price + +this.state.productsAddedToCart[i].price;
+                }
+                this.setState({
+                    totalCost : price
+                });
+            }
+
+            render() {
+				return(
+					<div className="flexDisplay">
+						<div className="products">
+							<h3 className="heading">Products</h3>
+						    {this.state.products.map((item, index) => (
+						       <RenderProduct 
+						       		key={item.id.toString()}
+						       		name={item.name} 
+                                    brand={item.brand}
+						       		price={`Rs. ` + item.price + `/- only`}
+						       		addProductToCart={(id) => { this.addProductToCart(item.id); }}
+						       />
+                              
+						    ))}
+						</div>
+
+						<div className="cart">
+							<h3 className="heading">Products Added To Cart</h3>
+                            <div className="cartTable">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Brand</th>
+                                        <th scope="col">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.productsAddedToCart.map((item, index) => (
+                                    <RenderCart 
+                                            key={item.id.toString()}
+                                            id={item.id}
+                                    
+                                            name={item.name} 
+                                            brand={item.brand}
+                                            price={`Rs. ` + item.price + `/- only`}
+                                    />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                            <button className="btn btn-info" onClick={this.calculateTotalPrice}>Buy</button>
+                            <div> Total Products : {this.state.productsAddedToCart.length}</div>
+                            <div> Total Cost : {`Rs. `+this.state.totalCost +`/- only`}</div>
+
+						</div>
+					</div>
+				);
+			}
+        }
+
+        class RenderProduct extends React.Component {
+			render() {
+				return(		
+                    <div className="cardWidth">
+                        <div className="card">
+                            <div className="card-header">{this.props.name}</div>
+                            <div className="card-body">
+                                <p className="card-text">price : {this.props.price}</p>
+                                <p className="card-text">brand : {this.props.brand}</p>
+                                <button className="btn btn-info" onClick={this.props.addProductToCart}>ADD TO CART</button>
+                            </div>           
+                        </div>					
+                    </div>
+				);
+			}
+		}
+
+		class RenderCart extends React.Component {
+			render() {
+				return(
+                    <tr>
+                        <td>{this.props.id}</td>
+                        <td>{this.props.name}</td>
+                        <td>{this.props.brand}</td>
+                        <td>{this.props.price}</td>
+                    </tr>	
+                    // <div className="cardWidth">
+                    //     <div className="card">
+                    //         <div className="card-header">{this.props.name}</div>
+                    //         <div className="card-body">
+                    //             <p className="card-text">price : {this.props.price}</p>
+                    //             <p className="card-text">brand : {this.props.brand}</p>
+                    //         </div>           
+                    //     </div>					
+                    // </div>
+				);
+			}
+		}
+        function onload(){
+            ReactDOM.render(<ShoppingApp/>, document.getElementById("main"));
+        }
+    </script>
+    <title>Document</title>
+</head>
+<body onload="onload()" style="text-align: center" >
+    <div id="main"></div>
+</body>
+</html>
