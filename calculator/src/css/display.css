@@ -1,0 +1,8 @@
+.componentDisplay{
+   text-align: center;
+   background-color: lightsalmon;
+}
+input {
+    text-align: right;
+    color: red;
+}

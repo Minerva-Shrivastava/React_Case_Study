@@ -1,0 +1,21 @@
+.buttonsContainer {
+    margin: 0 auto;
+    width: 80%;
+}
+.gridContainer {
+    display: grid;
+    width: 35%;
+    grid-template-columns: 60px 60px 60px 60px;
+    grid-template-rows: 60px 60px 60px 60px 60px;
+    padding: 30px;
+    grid-gap: 30px;
+    margin-left: 298px;
+    
+}
+.buttons {
+    border-radius: 50%;
+    background-color: rgb(46, 137, 165);
+    border: none;
+    color: whitesmoke;
+    font-size: 18px;
+}
